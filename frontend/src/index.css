@@ -1,0 +1,52 @@
+/* Global Reset & Base Styles */
+:root {
+  --bg-main: #f0f2f5;
+  --bg-card: #ffffff;
+  --border-subtle: #e4e6eb;
+  --border-strong: #dbdbdb;
+  --text-primary: #050505;
+  --text-secondary: #65676b;
+  --text-muted: #8a8d91;
+  --primary-blue: #1877f2;
+  --primary-blue-hover: #166fe5;
+  --like-active: #ed4956;
+  --hover-gray: #f2f2f2;
+  --active-gray: #e4e6eb;
+  --danger: #dc3545;
+  --feed-max-width: 640px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  background-color: var(--bg-main);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 15px;
+  line-height: 1.4;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Enforce absolute prevention of horizontal scrolling */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+  width: 100%;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+input, textarea {
+  font-family: inherit;
+}
