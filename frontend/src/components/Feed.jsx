@@ -1,18 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import api from '../api/client';
 import CreatePost from './CreatePost';
 import PostItem from './PostItem';
+import Leaderboard from './Leaderboard';
+import SavedLetters from './SavedLetters';
 
-export default function Feed({ onRequireAuth }) {
+const CATEGORIES = [
+  'All',
+  'Academics',
+  'Hackathons & Tech',
+  'Club & Cultural',
+  'Peer Mentorship',
+  'Campus Life'
+];
+
+export default function Feed({ activeTab = 'feed', onRequireAuth }) {
   const [letters, setLetters] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [sortOption, setSortOption] = useState('trending');
 
-  // Fetch all letters on mount
-  const fetchLetters = async () => {
+  // Fetch letters with search, category & sort params
+  const fetchLetters = useCallback(async () => {
     try {
       setLoading(true);
-      const res = await api.get('/letters');
+      const params = {
+        sort: sortOption
+      };
+      if (selectedCategory !== 'All') {
+        params.category = selectedCategory;
+      }
+      if (searchQuery.trim()) {
+        params.search = searchQuery.trim();
+      }
+
+      const res = await api.get('/letters', { params });
       setLetters(res.data);
       setError('');
     } catch (err) {
@@ -21,28 +45,48 @@ export default function Feed({ onRequireAuth }) {
     } finally {
       setLoading(false);
     }
-  };
+  }, [selectedCategory, searchQuery, sortOption]);
 
   useEffect(() => {
-    fetchLetters();
-  }, []);
+    if (activeTab === 'feed') {
+      const timer = setTimeout(() => {
+        fetchLetters();
+      }, 250);
+      return () => clearTimeout(timer);
+    }
+  }, [fetchLetters, activeTab]);
 
-  // Prepend newly created post
   const handleLetterCreated = (newLetter) => {
     setLetters((prev) => [newLetter, ...prev]);
   };
 
-  // Update modified post (like, comment)
   const handleUpdateLetter = (updatedLetter) => {
     setLetters((prev) =>
       prev.map((letter) => (letter._id === updatedLetter._id ? updatedLetter : letter))
     );
   };
 
-  // Remove deleted post
   const handleDeleteLetter = (deletedId) => {
     setLetters((prev) => prev.filter((letter) => letter._id !== deletedId));
   };
+
+  // Render Leaderboard tab
+  if (activeTab === 'leaderboard') {
+    return (
+      <main className="main-feed-container">
+        <Leaderboard />
+      </main>
+    );
+  }
+
+  // Render Saved tab
+  if (activeTab === 'saved') {
+    return (
+      <main className="main-feed-container">
+        <SavedLetters onRequireAuth={onRequireAuth} />
+      </main>
+    );
+  }
 
   return (
     <main className="main-feed-container">
@@ -51,6 +95,77 @@ export default function Feed({ onRequireAuth }) {
         onLetterCreated={handleLetterCreated}
         onRequireAuth={onRequireAuth}
       />
+
+      {/* Discovery, Search & Filtering Header */}
+      <div className="feed-card filter-container-card">
+        {/* Search Field */}
+        <div className="search-input-wrapper">
+          <svg
+            className="search-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input
+            type="text"
+            className="feed-search-input"
+            placeholder="Search by recipient name, peer, or keyword..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="search-clear-btn"
+              title="Clear search"
+            >
+              ✕
+            </button>
+          )}
+        </div>
+
+        {/* Category Filter Pills */}
+        <div className="category-scroll-container">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              className={`category-pill-btn ${selectedCategory === cat ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(cat)}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* Sorting Tabs */}
+        <div className="sort-tabs-row">
+          <span className="sort-label">Sort:</span>
+          <button
+            className={`sort-tab-btn ${sortOption === 'trending' ? 'active' : ''}`}
+            onClick={() => setSortOption('trending')}
+          >
+            🔥 Trending
+          </button>
+          <button
+            className={`sort-tab-btn ${sortOption === 'latest' ? 'active' : ''}`}
+            onClick={() => setSortOption('latest')}
+          >
+            ⏱️ Latest
+          </button>
+          <button
+            className={`sort-tab-btn ${sortOption === 'impact' ? 'active' : ''}`}
+            onClick={() => setSortOption('impact')}
+          >
+            ⭐ Top Impact
+          </button>
+        </div>
+      </div>
 
       {/* Error Notice */}
       {error && (
@@ -62,13 +177,17 @@ export default function Feed({ onRequireAuth }) {
       {/* Loading Indicator */}
       {loading ? (
         <div className="spinner-container">
-          <p>Loading shoutouts...</p>
+          <p>Loading campus shoutouts...</p>
         </div>
       ) : letters.length === 0 ? (
         /* Empty Feed State */
         <div className="empty-feed">
-          <h4>No Shoutouts Yet</h4>
-          <p>Be the first one to appreciate someone or share an open letter!</p>
+          <h4>No Shoutouts Found</h4>
+          <p>
+            {searchQuery || selectedCategory !== 'All'
+              ? 'Try clearing your search query or choosing another category filter.'
+              : 'Be the first one to appreciate someone on campus!'}
+          </p>
         </div>
       ) : (
         /* Letters Feed Stream */
