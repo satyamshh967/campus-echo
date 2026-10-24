@@ -24,7 +24,22 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true, 'Password is required'],
       minlength: [6, 'Password must be at least 6 characters']
-    }
+    },
+    department: {
+      type: String,
+      trim: true,
+      default: 'General'
+    },
+    karmaScore: {
+      type: Number,
+      default: 0
+    },
+    savedLetters: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Letter'
+      }
+    ]
   },
   {
     timestamps: true

@@ -19,10 +19,11 @@ app.use(express.urlencoded({ extended: true }));
 // API Routes
 app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/letters', require('./routes/letterRoutes'));
+app.use('/api/notifications', require('./routes/notificationRoutes'));
 
 // Root endpoint
 app.get('/', (req, res) => {
-  res.json({ message: 'Open Letter / Shoutout Board API is running...' });
+  res.json({ message: 'CampusEcho API is running...' });
 });
 
 // 404 Route Not Found Handler
