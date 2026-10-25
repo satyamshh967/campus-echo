@@ -1,7 +1,13 @@
+const mongoose = require('mongoose');
 const Letter = require('../models/Letter');
 const User = require('../models/User');
 const Notification = require('../models/Notification');
 const Report = require('../models/Report');
+
+// Helper to escape regex special characters (avoids regex injection and syntax errors)
+const escapeRegex = (string) => {
+  return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
 
 // Helper to mask anonymous authors
 const sanitizeLetterAuthor = (letter, currentUserId = null) => {
@@ -42,8 +48,9 @@ const getLetters = async (req, res) => {
       filter.category = category;
     }
 
-    if (search && search.trim()) {
-      const regex = new RegExp(search.trim(), 'i');
+    if (search && typeof search === 'string' && search.trim()) {
+      const safeSearch = escapeRegex(search.trim());
+      const regex = new RegExp(safeSearch, 'i');
       filter.$or = [{ recipientName: regex }, { content: regex }];
     }
 
@@ -88,6 +95,10 @@ const getLetters = async (req, res) => {
 // @access  Public
 const getLetterById = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid letter ID format' });
+    }
+
     const letter = await Letter.findById(req.params.id)
       .populate('author', 'name email department karmaScore')
       .populate('comments.user', 'name department')
@@ -110,12 +121,20 @@ const createLetter = async (req, res) => {
   try {
     const { recipientName, content, category, badge, isAnonymous } = req.body;
 
-    if (!recipientName || !recipientName.trim()) {
+    if (!recipientName || typeof recipientName !== 'string' || !recipientName.trim()) {
       return res.status(400).json({ message: 'Recipient name is required' });
     }
 
-    if (!content || !content.trim()) {
+    if (!content || typeof content !== 'string' || !content.trim()) {
       return res.status(400).json({ message: 'Letter content cannot be empty' });
+    }
+
+    if (recipientName.trim().length > 100) {
+      return res.status(400).json({ message: 'Recipient name cannot exceed 100 characters' });
+    }
+
+    if (content.trim().length > 3000) {
+      return res.status(400).json({ message: 'Content cannot exceed 3000 characters' });
     }
 
     const newLetter = new Letter({
@@ -137,9 +156,10 @@ const createLetter = async (req, res) => {
     // Reward author karma score (+5 points for giving recognition)
     await User.findByIdAndUpdate(req.user._id, { $inc: { karmaScore: 5 } });
 
-    // Check if recipient matches a registered user on campus to dispatch shoutout notification
+    // Safely check if recipient matches a registered user on campus to dispatch shoutout notification
+    const safeRecipient = escapeRegex(recipientName.trim());
     const matchedRecipient = await User.findOne({
-      name: { $regex: new RegExp(`^${recipientName.trim()}$`, 'i') }
+      name: { $regex: new RegExp(`^${safeRecipient}$`, 'i') }
     });
 
     if (matchedRecipient && matchedRecipient._id.toString() !== req.user._id.toString()) {
@@ -165,6 +185,10 @@ const createLetter = async (req, res) => {
 // @access  Private
 const toggleReaction = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid letter ID format' });
+    }
+
     const { type = 'heart' } = req.body;
     const validTypes = ['applause', 'heart', 'insightful', 'inspiring'];
 
@@ -243,10 +267,18 @@ const likeLetter = async (req, res) => {
 // @access  Private
 const addComment = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid letter ID format' });
+    }
+
     const { text } = req.body;
 
-    if (!text || !text.trim()) {
+    if (!text || typeof text !== 'string' || !text.trim()) {
       return res.status(400).json({ message: 'Comment text cannot be empty' });
+    }
+
+    if (text.trim().length > 500) {
+      return res.status(400).json({ message: 'Comment cannot exceed 500 characters' });
     }
 
     const letter = await Letter.findById(req.params.id);
@@ -291,9 +323,13 @@ const addComment = async (req, res) => {
 // @access  Private
 const reportLetter = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid letter ID format' });
+    }
+
     const { reason, details } = req.body;
 
-    if (!reason) {
+    if (!reason || typeof reason !== 'string') {
       return res.status(400).json({ message: 'Please provide a valid report reason' });
     }
 
@@ -316,7 +352,7 @@ const reportLetter = async (req, res) => {
       letter: letter._id,
       reporter: req.user._id,
       reason,
-      details: details ? details.trim() : ''
+      details: details && typeof details === 'string' ? details.trim() : ''
     });
 
     letter.reportCount = (letter.reportCount || 0) + 1;
@@ -343,6 +379,10 @@ const reportLetter = async (req, res) => {
 // @access  Private
 const toggleBookmark = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid letter ID format' });
+    }
+
     const letterId = req.params.id;
     const user = await User.findById(req.user._id);
 
@@ -435,6 +475,10 @@ const getLeaderboard = async (req, res) => {
 // @access  Private
 const deleteLetter = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({ message: 'Invalid letter ID format' });
+    }
+
     const letter = await Letter.findById(req.params.id);
     if (!letter) {
       return res.status(404).json({ message: 'Letter not found' });

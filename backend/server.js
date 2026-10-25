@@ -33,7 +33,21 @@ app.use((req, res, next) => {
 
 // Central Error Handler
 app.use((err, req, res, next) => {
-  console.error('Unhandled Server Error:', err.stack);
+  console.error('Server Error:', err.message);
+
+  if (err.type === 'entity.parse.failed') {
+    return res.status(400).json({ message: 'Malformed JSON payload in request' });
+  }
+
+  if (err.name === 'CastError') {
+    return res.status(400).json({ message: `Resource not found with invalid ID: ${err.value}` });
+  }
+
+  if (err.name === 'ValidationError') {
+    const messages = Object.values(err.errors).map((val) => val.message);
+    return res.status(400).json({ message: messages.join(', ') });
+  }
+
   res.status(err.status || 500).json({
     message: err.message || 'Internal Server Error'
   });

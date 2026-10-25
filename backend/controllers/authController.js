@@ -21,18 +21,29 @@ const registerUser = async (req, res) => {
       return res.status(400).json({ message: 'Please provide all required fields (name, email, password)' });
     }
 
+    if (typeof name !== 'string' || typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ message: 'Invalid input data format' });
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+    const cleanName = name.trim();
+
     if (password.length < 6) {
       return res.status(400).json({ message: 'Password must be at least 6 characters' });
     }
 
-    const userExists = await User.findOne({ email: email.toLowerCase().trim() });
+    if (cleanName.length > 50) {
+      return res.status(400).json({ message: 'Name cannot exceed 50 characters' });
+    }
+
+    const userExists = await User.findOne({ email: cleanEmail });
     if (userExists) {
       return res.status(400).json({ message: 'An account with this email already exists' });
     }
 
     const user = await User.create({
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
+      name: cleanName,
+      email: cleanEmail,
       password
     });
 
@@ -41,6 +52,8 @@ const registerUser = async (req, res) => {
         _id: user._id,
         name: user.name,
         email: user.email,
+        department: user.department || 'General',
+        karmaScore: user.karmaScore || 0,
         token: generateToken(user._id)
       });
     } else {
@@ -62,13 +75,20 @@ const loginUser = async (req, res) => {
       return res.status(400).json({ message: 'Please provide both email and password' });
     }
 
-    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (typeof email !== 'string' || typeof password !== 'string') {
+      return res.status(400).json({ message: 'Invalid credentials format' });
+    }
+
+    const cleanEmail = email.toLowerCase().trim();
+    const user = await User.findOne({ email: cleanEmail });
 
     if (user && (await user.matchPassword(password))) {
       return res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
+        department: user.department || 'General',
+        karmaScore: user.karmaScore || 0,
         token: generateToken(user._id)
       });
     } else {
