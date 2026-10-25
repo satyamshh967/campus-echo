@@ -175,7 +175,7 @@ export default function CreatePost({ onLetterCreated, onRequireAuth }) {
         </div>
 
         <div className="create-post-footer">
-          <span className="char-counter">
+          <span className={`char-counter ${content.length > 2800 ? 'char-counter-warn' : ''}`}>
             {content.length}/3000 characters
           </span>
           <button

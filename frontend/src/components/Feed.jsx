@@ -174,6 +174,24 @@ export default function Feed({ activeTab = 'feed', onRequireAuth }) {
         </div>
       )}
 
+      {/* Active Filter Indicator */}
+      {(selectedCategory !== 'All' || searchQuery.trim()) && (
+        <div className="active-filter-banner">
+          <span>
+            Filtering by: {selectedCategory !== 'All' ? `"${selectedCategory}"` : ''}{selectedCategory !== 'All' && searchQuery.trim() ? ' • ' : ''}{searchQuery.trim() ? `"${searchQuery.trim()}"` : ''}
+          </span>
+          <button
+            className="btn-text-sm"
+            onClick={() => {
+              setSelectedCategory('All');
+              setSearchQuery('');
+            }}
+          >
+            Clear filters
+          </button>
+        </div>
+      )}
+
       {/* Loading Indicator */}
       {loading ? (
         <div className="spinner-container">

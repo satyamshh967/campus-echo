@@ -296,6 +296,31 @@
   background-color: #e7f3ff;
 }
 
+/* Active Filter Banner */
+.active-filter-banner {
+  background-color: #e7f3ff;
+  border: 1px solid #d0e7ff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  color: var(--primary-blue);
+  font-weight: 500;
+}
+
+.btn-text-sm {
+  background: none;
+  border: none;
+  color: var(--primary-blue);
+  font-weight: 600;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
 /* Create Post Section */
 .create-post-card {
   padding: 16px;
@@ -413,6 +438,11 @@
   color: var(--text-muted);
 }
 
+.char-counter-warn {
+  color: #d97706;
+  font-weight: 600;
+}
+
 /* Post Card Layout */
 .post-card {
   padding: 0;
@@ -488,6 +518,7 @@
   display: flex;
   gap: 6px;
   padding: 0 16px 8px 16px;
+  flex-wrap: wrap;
 }
 
 .tag-pill {
@@ -540,7 +571,7 @@
 .post-actions {
   display: flex;
   border-bottom: 1px solid var(--border-subtle);
-  padding: 2px 8px;
+  padding: 2px 6px;
 }
 
 .action-btn {
@@ -548,15 +579,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
+  gap: 5px;
   background: transparent;
   border: none;
   border-radius: 4px;
-  padding: 8px;
-  font-size: 0.88rem;
+  padding: 8px 4px;
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-secondary);
   transition: background-color 0.12s ease;
+  min-height: 38px;
 }
 
 .action-btn:hover {
@@ -569,6 +601,10 @@
 
 .action-btn.active-bookmark {
   color: var(--primary-blue);
+}
+
+.action-btn.active-share {
+  color: #10b981;
 }
 
 /* Multi-Reactions Popover */
@@ -1071,4 +1107,145 @@
   padding: 32px 0;
   color: var(--text-secondary);
   font-size: 0.9rem;
+}
+
+/* ====================================================
+   MOBILE-FIRST RESPONSIVE DESIGN (Instagram / Facebook Style)
+   ==================================================== */
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+/* Medium & Small Screens (<= 640px) */
+@media (max-width: 640px) {
+  .navbar {
+    padding: 0 12px;
+  }
+
+  .desktop-nav {
+    display: none;
+  }
+
+  .desktop-bell {
+    display: none;
+  }
+
+  .desktop-user-meta {
+    display: none;
+  }
+
+  .brand-subtitle {
+    display: none;
+  }
+
+  .navbar-brand {
+    font-size: 1.1rem;
+  }
+
+  .btn-logout-compact,
+  .btn-login-compact {
+    padding: 4px 8px;
+    font-size: 0.8rem;
+  }
+
+  .main-feed-container {
+    padding: 0 8px;
+    margin: 10px auto 74px auto; /* 74px bottom offset for mobile navigation bar */
+  }
+
+  .feed-card {
+    margin-bottom: 10px;
+    border-radius: 6px;
+    padding: 12px 14px;
+  }
+
+  /* Mobile Bottom Navigation Bar */
+  .mobile-bottom-nav {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 56px;
+    background-color: var(--bg-card);
+    border-top: 1px solid var(--border-strong);
+    z-index: 999;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 6px;
+  }
+
+  .mobile-tab-btn {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 6px 0;
+    transition: color 0.12s ease;
+  }
+
+  .mobile-tab-btn:hover {
+    color: var(--text-primary);
+  }
+
+  .mobile-tab-btn.active {
+    color: var(--primary-blue);
+  }
+
+  .mobile-badge-dot {
+    top: 2px;
+    right: 18px;
+  }
+
+  .post-header {
+    padding: 10px 12px;
+  }
+
+  .post-content {
+    padding: 2px 12px 10px 12px;
+    font-size: 0.92rem;
+  }
+
+  .post-metrics {
+    padding: 6px 12px;
+  }
+
+  .comments-section {
+    padding: 10px 12px;
+  }
+}
+
+/* Extra Small Mobile Devices (<= 480px) */
+@media (max-width: 480px) {
+  .post-options-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
+
+  .badge-stats-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-btn {
+    padding: 8px 2px;
+    font-size: 0.78rem;
+    gap: 4px;
+  }
+
+  .action-btn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .auth-card {
+    padding: 18px 16px;
+  }
 }
