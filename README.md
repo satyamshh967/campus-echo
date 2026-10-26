@@ -3,8 +3,8 @@
 > **A workflow-driven campus recognition and peer-impact ecosystem built on the MERN stack.**
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/satyamshh967/campus-echo)
-[![Tech Stack](https://img.shields.io/badge/Stack-MongoDB%20%7C%20Express%20%7C%20React%20%7C%20Node-blue)](#tech-stack)
-[![UI Style](https://img.shields.io/badge/UI-Flat%20Facebook%2FInstagram%20Feed-1877f2)](#user-interface--styling)
+[![Tech Stack](https://img.shields.io/badge/Stack-MongoDB%20%7C%20Express%20%7C%20React%20%7C%20Node-blue)](#5-tech-stack)
+[![UI Style](https://img.shields.io/badge/UI-Flat%20Facebook%2FInstagram%20Feed-1877f2)](#7-user-interface--styling)
 
 ---
 
