@@ -13,7 +13,6 @@
 
 - **Video Walkthrough**: [Watch Project Demo Walkthrough (Google Drive)](PASTE_YOUR_GOOGLE_DRIVE_LINK_HERE)
 - **Viewing Access**: Set to **"Anyone with the link can view"** for evaluator access without requiring permissions.
-- **Walkthrough Guide**: Detailed scene-by-scene script available in [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md).
 
 ---
 

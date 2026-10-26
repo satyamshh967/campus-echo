@@ -26,3 +26,6 @@ yarn-error.log*
 .idea/
 .DS_Store
 Thumbs.db
+
+# Local scripts & notes
+DEMO_SCRIPT.md
