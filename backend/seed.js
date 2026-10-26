@@ -20,35 +20,34 @@ const seedDatabase = async () => {
     await Report.deleteMany({});
 
     console.log('[Seed] Creating demo campus users...');
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('password123', salt);
+    const plainPassword = 'password123';
 
     const users = await User.create([
       {
         name: 'Alex Rivera',
         email: 'alex@campus.edu',
-        password: hashedPassword,
+        password: plainPassword,
         department: 'Computer Science',
         karmaScore: 42
       },
       {
         name: 'Sarah Connor',
         email: 'sarah@campus.edu',
-        password: hashedPassword,
+        password: plainPassword,
         department: 'Design & UX',
         karmaScore: 35
       },
       {
         name: 'David Kim',
         email: 'david@campus.edu',
-        password: hashedPassword,
+        password: plainPassword,
         department: 'Electrical Engineering',
         karmaScore: 28
       },
       {
         name: 'Priya Patel',
         email: 'priya@campus.edu',
-        password: hashedPassword,
+        password: plainPassword,
         department: 'Business & Management',
         karmaScore: 50
       }
