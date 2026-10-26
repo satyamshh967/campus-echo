@@ -2,10 +2,20 @@
 
 > **A workflow-driven campus recognition and peer-impact ecosystem built on the MERN stack.**
 
+[![Live Web App](https://img.shields.io/badge/Live%20Demo-Vercel-black?logo=vercel)](https://campus-echo-black.vercel.app)
+[![API Server](https://img.shields.io/badge/API%20Server-Render-46E3B7?logo=render)](https://campus-echo-eike.onrender.com)
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/satyamshh967/campus-echo)
 [![Demo Video](https://img.shields.io/badge/Demo%20Video-Google%20Drive-4285F4?logo=googledrive)](https://drive.google.com/file/d/1WoalGd6J_44NrflqL9Wz9n2HAPusicn0/view?usp=sharing)
 [![Tech Stack](https://img.shields.io/badge/Stack-MongoDB%20%7C%20Express%20%7C%20React%20%7C%20Node-blue)](#5-tech-stack)
-[![UI Style](https://img.shields.io/badge/UI-Flat%20Facebook%2FInstagram%20Feed-1877f2)](#7-user-interface--styling)
+
+---
+
+## 🔗 Live Deployments & Project Links
+
+- **Live Application (Frontend)**: [https://campus-echo-black.vercel.app](https://campus-echo-black.vercel.app)
+- **Production API (Backend)**: [https://campus-echo-eike.onrender.com](https://campus-echo-eike.onrender.com)
+- **GitHub Repository**: [https://github.com/satyamshh967/campus-echo](https://github.com/satyamshh967/campus-echo)
+- **Demo Video Walkthrough**: [Watch Video on Google Drive](https://drive.google.com/file/d/1WoalGd6J_44NrflqL9Wz9n2HAPusicn0/view?usp=sharing) (Open access)
 
 ---
 
