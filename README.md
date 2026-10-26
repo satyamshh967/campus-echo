@@ -3,8 +3,17 @@
 > **A workflow-driven campus recognition and peer-impact ecosystem built on the MERN stack.**
 
 [![GitHub Repo](https://img.shields.io/badge/GitHub-Repository-181717?logo=github)](https://github.com/satyamshh967/campus-echo)
+[![Demo Video](https://img.shields.io/badge/Demo%20Video-Google%20Drive-4285F4?logo=googledrive)](#️-project-demo-video)
 [![Tech Stack](https://img.shields.io/badge/Stack-MongoDB%20%7C%20Express%20%7C%20React%20%7C%20Node-blue)](#5-tech-stack)
 [![UI Style](https://img.shields.io/badge/UI-Flat%20Facebook%2FInstagram%20Feed-1877f2)](#7-user-interface--styling)
+
+---
+
+## 📽️ Project Demo Video
+
+- **Video Walkthrough**: [Watch Project Demo Walkthrough (Google Drive)](PASTE_YOUR_GOOGLE_DRIVE_LINK_HERE)
+- **Viewing Access**: Set to **"Anyone with the link can view"** for evaluator access without requiring permissions.
+- **Walkthrough Guide**: Detailed scene-by-scene script available in [`DEMO_SCRIPT.md`](./DEMO_SCRIPT.md).
 
 ---
 
